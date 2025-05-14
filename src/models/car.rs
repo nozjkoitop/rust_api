@@ -3,12 +3,11 @@ use crate::schema::cars;
 use chrono::NaiveDateTime;
 use diesel::{Identifiable, Insertable, Queryable};
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
 
 #[derive(Identifiable, Queryable, Serialize)]
 #[diesel(table_name = cars)]
 pub struct Car {
-    pub id: Uuid,
+    pub id: i64,
     pub make: String,
     pub model: String,
     pub year: i32,

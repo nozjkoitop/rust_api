@@ -9,9 +9,7 @@ use salon_api::{
     auth::jwt::JwtManager,
     auth::middleware::auth_middleware,
     db::establish_pool,
-    handlers::{auth_handlers, car_handlers, image_handlers}
-
-    ,
+    handlers::{auth_handlers, car_handlers, image_handlers},
     config::jwt_config::AuthConfig,
 };
 

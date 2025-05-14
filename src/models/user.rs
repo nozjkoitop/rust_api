@@ -12,7 +12,7 @@ pub enum UserRole {
     User,
 }
 
-#[derive(Identifiable, Queryable, Serialize, Debug)]
+#[derive(Identifiable, Queryable, Serialize)]
 #[diesel(table_name = users)]
 #[diesel(check_for_backend(Pg))]
 pub struct User {

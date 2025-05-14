@@ -8,7 +8,7 @@ pub mod sql_types {
 
 diesel::table! {
     cars (id) {
-        id -> Uuid,
+        id -> Int8,
         make -> Varchar,
         model -> Varchar,
         year -> Int4,
@@ -19,8 +19,8 @@ diesel::table! {
 
 diesel::table! {
     images (id) {
-        id -> Uuid,
-        car_id -> Uuid,
+        id -> Int8,
+        car_id -> Int8,
         url -> Text,
         created_at -> Timestamp,
     }

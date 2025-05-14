@@ -15,7 +15,7 @@ impl CarService {
         self.repo.list()
     }
 
-    pub fn get_by_id(&self, id: uuid::Uuid) -> Result<Car, Box<dyn Error + Send + Sync>> {
+    pub fn get_by_id(&self, id: i64) -> Result<Car, Box<dyn Error + Send + Sync>> {
         self.repo.get_by_id(id)
     }
 
@@ -23,7 +23,7 @@ impl CarService {
         self.repo.create(&new)
     }
 
-    pub fn delete(&self, id: uuid::Uuid) -> Result<usize, Box<dyn Error + Send + Sync>> {
+    pub fn delete(&self, id: i64) -> Result<usize, Box<dyn Error + Send + Sync>> {
         self.repo.delete(id)
     }
 }

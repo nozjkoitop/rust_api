@@ -11,7 +11,7 @@ impl ImageService {
         Self { repo }
     }
 
-    pub fn list_for_car(&self, car_id: uuid::Uuid) -> Result<Vec<Image>, Box<dyn Error + Send + Sync>> {
+    pub fn list_for_car(&self, car_id: i64) -> Result<Vec<Image>, Box<dyn Error + Send + Sync>> {
         self.repo.list_for_car(car_id)
     }
 
@@ -20,7 +20,7 @@ impl ImageService {
         self.repo.create(&new)
     }
 
-    pub fn delete(&self, id: uuid::Uuid) -> Result<usize, Box<dyn Error + Send + Sync>> {
+    pub fn delete(&self, id: i64) -> Result<usize, Box<dyn Error + Send + Sync>> {
         self.repo.delete(id)
     }
 }

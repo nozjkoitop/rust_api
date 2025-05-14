@@ -2,7 +2,6 @@ use diesel::prelude::*;
 use crate::db::DbPool;
 use crate::models::{Image, NewImage};
 use std::error::Error;
-use uuid::Uuid;
 use crate::schema::images::dsl::{images, car_id};
 
 #[derive(Clone)]
@@ -16,7 +15,7 @@ impl ImageRepository {
     }
 
 
-    pub fn list_for_car(&self, car: Uuid) -> Result<Vec<Image>, Box<dyn Error + Send + Sync>> {
+    pub fn list_for_car(&self, car: i64) -> Result<Vec<Image>, Box<dyn Error + Send + Sync>> {
         let mut conn = self.pool.get()?;
         let items = images
             .into_boxed::<diesel::pg::Pg>()
@@ -27,15 +26,15 @@ impl ImageRepository {
 
     pub fn create(&self, new: &NewImage) -> Result<Image, Box<dyn Error + Send + Sync>> {
         let mut conn = self.pool.get()?;
-        let img = diesel::insert_into(crate::schema::images::dsl::images)
+        let img = diesel::insert_into(images)
             .values(new)
             .get_result::<Image>(&mut conn)?;
         Ok(img)
     }
 
-    pub fn delete(&self, id: uuid::Uuid) -> Result<usize, Box<dyn Error + Send + Sync>> {
+    pub fn delete(&self, id: i64) -> Result<usize, Box<dyn Error + Send + Sync>> {
         let mut conn = self.pool.get()?;
-        let affected = diesel::delete(crate::schema::images::dsl::images.find(id))
+        let affected = diesel::delete(images.find(id))
             .execute(&mut conn)?;
         Ok(affected)
     }

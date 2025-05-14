@@ -1,5 +1,4 @@
 use actix_web::{web, HttpResponse, Responder};
-use uuid::Uuid;
 
 use crate::{
     models::NewImage,
@@ -9,13 +8,20 @@ use crate::{
 /// GET /cars/{car_id}/images
 pub async fn list_images(
     svc: web::Data<ImageService>,
-    path: web::Path<Uuid>,
+    path: web::Path<i64>,
 ) -> impl Responder {
     let car_id = path.into_inner();
 
     let imgs = match web::block(move || svc.list_for_car(car_id)).await {
         Ok(Ok(c)) => c,
-        _ => return HttpResponse::InternalServerError().body("Error listing images"),
+        Ok(Err(e)) => {
+            return HttpResponse::InternalServerError().body(format!("Error listing images: {}", e));
+        }
+        Err(block_err) => {
+            log::error!("blocking error: {:?}", block_err);
+            return HttpResponse::InternalServerError()
+                .body(format!("Error listing images: {}", block_err));
+        }
     };
     HttpResponse::Ok().json(imgs)
 }
@@ -23,7 +29,7 @@ pub async fn list_images(
 /// POST /cars/{car_id}/images
 pub async fn upload_image(
     svc: web::Data<ImageService>,
-    path: web::Path<Uuid>,
+    path: web::Path<i64>,
     new_img: web::Json<NewImage>,
 ) -> impl Responder {
     let car_id = path.into_inner();
@@ -32,7 +38,15 @@ pub async fn upload_image(
 
     let img = match web::block(move || svc.upload(new_img)).await {
         Ok(Ok(c)) => c,
-        _ => return HttpResponse::InternalServerError().body("Error listing images"),
+        Ok(Err(e)) => {
+            return HttpResponse::InternalServerError()
+                .body(format!("Error uploading: {}", e));
+        }
+        Err(block_err) => {
+            log::error!("blocking error: {:?}", block_err);
+            return HttpResponse::InternalServerError()
+                .body(format!("Error uploading: {}", block_err));
+        }
     };
     HttpResponse::Created().json(img)
 }

@@ -3,14 +3,13 @@ use crate::models::Car;
 use chrono::NaiveDateTime;
 use diesel::{Identifiable, Queryable, Associations, Insertable};
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
 
 #[derive(Identifiable, Queryable, Serialize, Associations)]
 #[diesel(table_name = images)]
 #[diesel(belongs_to(Car))]
 pub struct Image {
-    pub id: Uuid,
-    pub car_id: Uuid,
+    pub id: i64,
+    pub car_id: i64,
     pub url: String,
     pub created_at: NaiveDateTime,
 }
@@ -19,6 +18,6 @@ pub struct Image {
 #[diesel(table_name = images)]
 pub struct NewImage {
     #[diesel(column_name = car_id, sql_type = diesel::sql_types::Uuid)]
-    pub car_id: Uuid,
+    pub car_id: i64,
     pub url: String,
 }
