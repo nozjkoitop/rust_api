@@ -32,6 +32,7 @@ services:
       RUST_LOG: info
     volumes:
       - ./migrations:/usr/local/bin/migrations
+      - ./uploads:/usr/src/app/uploads
 
 volumes:
   db-data:

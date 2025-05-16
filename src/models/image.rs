@@ -17,7 +17,6 @@ pub struct Image {
 #[derive(Insertable, Deserialize)]
 #[diesel(table_name = images)]
 pub struct NewImage {
-    #[diesel(column_name = car_id, sql_type = diesel::sql_types::Uuid)]
     pub car_id: i64,
     pub url: String,
 }

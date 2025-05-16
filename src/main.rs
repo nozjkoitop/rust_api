@@ -8,9 +8,9 @@ use salon_api::services::user_service::UserService;
 use salon_api::{
     auth::jwt::JwtManager,
     auth::middleware::auth_middleware,
+    config::jwt_config::AuthConfig,
     db::establish_pool,
     handlers::{auth_handlers, car_handlers, image_handlers},
-    config::jwt_config::AuthConfig,
 };
 
 #[actix_web::main]
@@ -38,7 +38,7 @@ async fn main() -> std::io::Result<()> {
             .service(
                 web::scope("/auth")
                     .route("/register", web::post().to(auth_handlers::register))
-                    .route("/login", web::post().to(auth_handlers::login))
+                    .route("/login", web::post().to(auth_handlers::login)),
             )
             // protected routes
             .service(
@@ -50,11 +50,16 @@ async fn main() -> std::io::Result<()> {
                     .service(
                         web::scope("/{car_id}/images")
                             .route("", web::get().to(image_handlers::list_images))
-                            .route("", web::post().to(image_handlers::upload_image))
+                            .route("/{id}", web::get().to(image_handlers::get_image_by_id)),
+                    )
+                    .service(
+                        web::scope("/{car_id}/image") // single image
+                            .route("", web::post().to(image_handlers::upload_image)),
                     )
             )
+
     })
-        .bind(("0.0.0.0", 8080))?
-        .run()
-        .await
+    .bind(("0.0.0.0", 8080))?
+    .run()
+    .await
 }

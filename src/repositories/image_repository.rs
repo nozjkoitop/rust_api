@@ -38,4 +38,9 @@ impl ImageRepository {
             .execute(&mut conn)?;
         Ok(affected)
     }
+
+    pub fn get(&self, id: i64) -> Result<Image, Box<dyn Error + Send + Sync>> {
+        let mut conn = self.pool.get()?;
+        Ok(images.find(id).first::<Image>(&mut conn)?)
+    }
 }

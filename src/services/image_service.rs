@@ -16,11 +16,14 @@ impl ImageService {
     }
 
     pub fn upload(&self, new: NewImage) -> Result<Image, Box<dyn Error + Send + Sync>> {
-        // could add business logic (e.g. file‐storage) here
         self.repo.create(&new)
     }
 
     pub fn delete(&self, id: i64) -> Result<usize, Box<dyn Error + Send + Sync>> {
         self.repo.delete(id)
+    }
+
+    pub fn get(&self, id: i64) -> Result<Image, Box<dyn Error + Send + Sync>> {
+        self.repo.get(id)
     }
 }
