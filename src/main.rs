@@ -50,12 +50,16 @@ async fn main() -> std::io::Result<()> {
                     .service(
                         web::scope("/{car_id}/images")
                             .route("", web::get().to(image_handlers::list_images))
-                            .route("/{id}", web::get().to(image_handlers::get_image_by_id)),
                     )
                     .service(
                         web::scope("/{car_id}/image") // single image
                             .route("", web::post().to(image_handlers::upload_image)),
                     )
+            )
+            .service(
+                web::scope("/image")
+                    .wrap(auth_middleware())
+                    .route("/{id}", web::get().to(image_handlers::get_image_by_id))
             )
 
     })

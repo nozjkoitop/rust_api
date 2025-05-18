@@ -1,9 +1,9 @@
-use std::path::PathBuf;
+use std::path::{Path};
 use actix_files::NamedFile;
 use actix_multipart::Multipart;
 use actix_web::{web, HttpResponse, Responder};
 use actix_web::Result;
-use actix_web::error::ErrorInternalServerError;
+use actix_web::error::{ErrorInternalServerError, ErrorNotFound};
 use crate::{
     models::NewImage,
     services::image_service::ImageService,
@@ -30,7 +30,7 @@ pub async fn list_images(
     HttpResponse::Ok().json(imgs)
 }
 
-/// GET /cars/{car_id}/image
+/// GET /image/{id}
 pub async fn get_image_by_id(
     svc: web::Data<ImageService>,
     path: web::Path<i64>,
@@ -39,13 +39,19 @@ pub async fn get_image_by_id(
 
     let img = web::block(move || svc.get(img_id))
         .await
-        .map_err(ErrorInternalServerError)?       // BlockingError → actix Error
-        .map_err(ErrorInternalServerError)?;      // repo Error    → actix Error
+        .map_err(ErrorInternalServerError)? 
+        .map_err(ErrorInternalServerError)?;  
 
     let fname = img.url.rsplit('/').next().unwrap_or(&img.url);
-    let disk: PathBuf = ["uploads", &img.car_id.to_string(), fname].iter().collect();
+    let disk = Path::new("uploads")
+        .join(img.car_id.to_string())
+        .join(fname);
 
-    Ok(NamedFile::open(disk)?)
+    NamedFile::open(&disk)
+        .map_err(|e| {
+            log::error!("Could not open {}: {}", disk.display(), e);
+            ErrorNotFound("Image not found")
+        })
 }
 
 /// POST /cars/{car_id}/image
