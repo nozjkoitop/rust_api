@@ -686,6 +686,7 @@ dependencies = [
  "num-traits",
  "pq-sys",
  "r2d2",
+ "serde_json",
  "uuid",
 ]
 
@@ -1739,6 +1740,7 @@ dependencies = [
  "jsonwebtoken",
  "log",
  "serde",
+ "serde_json",
  "tokio",
 ]
 

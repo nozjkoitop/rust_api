@@ -40,27 +40,36 @@ async fn main() -> std::io::Result<()> {
                     .route("/register", web::post().to(auth_handlers::register))
                     .route("/login", web::post().to(auth_handlers::login)),
             )
-            // protected routes
             .service(
                 web::scope("/cars")
-                    .wrap(auth_middleware())
                     .route("", web::get().to(car_handlers::list_cars))
-                    .route("", web::post().to(car_handlers::create_car))
                     .route("/{id}", web::get().to(car_handlers::get_car))
                     .service(
                         web::scope("/{car_id}/images")
-                            .route("", web::get().to(image_handlers::list_images))
+                            .route("", web::get().to(image_handlers::list_images)),
                     )
+                    // protected endpoints
+                    .route("",  web::post()
+                        .to(car_handlers::create_car)
+                        .wrap(auth_middleware()))
                     .service(
-                        web::scope("/{car_id}/image") // single image
-                            .route("", web::post().to(image_handlers::upload_image)),
+                        web::scope("/{car_id}/image")
+                            .route("", web::post()
+                                .to(image_handlers::upload_image)
+                                .wrap(auth_middleware())),
                     )
+                    .route("/{id}", web::delete()
+                        .to(car_handlers::delete_car)
+                        .wrap(auth_middleware()))
             )
             .service(
                 web::scope("/image")
-                    .wrap(auth_middleware())
                     .route("/{id}", web::get().to(image_handlers::get_image_by_id))
+                    .route("/{id}", web::delete()
+                        .to(image_handlers::delete_image)
+                        .wrap(auth_middleware()))
             )
+        
 
     })
     .bind(("0.0.0.0", 8080))?

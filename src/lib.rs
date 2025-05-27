@@ -5,6 +5,7 @@ pub mod schema;
 pub mod auth {
     pub mod jwt;
     pub mod middleware;
+    pub mod guards;
 }
 
 pub mod config {

@@ -14,6 +14,7 @@ diesel::table! {
         year -> Int4,
         price -> Numeric,
         created_at -> Timestamp,
+        properties -> Jsonb,
     }
 }
 
@@ -33,7 +34,8 @@ diesel::table! {
     users (id) {
         id -> Int8,
         username -> Varchar,
-        email -> Varchar,
+        phone -> Varchar,
+        email -> Nullable<Varchar>,
         password_hash -> Varchar,
         role -> UserRole,
         created_at -> Timestamp,

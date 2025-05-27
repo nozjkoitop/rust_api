@@ -18,7 +18,8 @@ pub enum UserRole {
 pub struct User {
     pub id: i64,
     pub username: String,
-    pub email: String,
+    pub phone: String,
+    pub email: Option<String>,
     pub password_hash: String,
     #[diesel(sql_type = UserRole)]
     pub role: UserRole,
@@ -29,7 +30,8 @@ pub struct User {
 #[diesel(table_name = users)]
 pub struct NewUser {
     pub username: String,
-    pub email: String,
+    pub phone: String,
+    pub email: Option<String>,
     pub password_hash: String,
     #[diesel(column_name = role, sql_type = UserRole)]
     pub role: UserRole,
@@ -38,7 +40,8 @@ pub struct NewUser {
 #[derive(Deserialize)]
 pub struct RegisterRequest {
     pub username: String,
-    pub email: String,
+    pub phone: String,
+    pub email: Option<String>,
     pub password: String,
 }
 

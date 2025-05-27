@@ -34,5 +34,15 @@ services:
       - ./migrations:/usr/local/bin/migrations
       - ./uploads:/usr/src/app/uploads
 
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      app:
+        condition: service_started
+
 volumes:
   db-data:

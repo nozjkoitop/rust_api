@@ -1,4 +1,4 @@
-use actix_web::{dev::ServiceRequest, Error as ActixError};
+use actix_web::{dev::ServiceRequest, Error as ActixError, HttpMessage};
 use actix_web_httpauth::{
     extractors::bearer::BearerAuth,
     middleware::HttpAuthentication,
@@ -10,21 +10,19 @@ use actix_web::web::Data;
 fn validator(
     req: ServiceRequest,
     creds: BearerAuth,
-) -> Ready<Result<ServiceRequest, (ActixError, ServiceRequest)>> {
-    // look up Data<JwtManager> instead of JwtManager
-    if let Some(jwt_data) = req.app_data::<Data<JwtManager>>() {
-        let jwt_mgr: &JwtManager = jwt_data.get_ref();
-        if jwt_mgr.verify_token(creds.token()).is_ok() {
-            ready(Ok(req))
-        } else {
-            ready(Err((actix_web::error::ErrorUnauthorized("Invalid token"), req)))
-        }
-    } else {
-        ready(Err((actix_web::error::ErrorInternalServerError(
-            "JwtManager not configured",
-        ), req)))
+) -> Ready<Result<ServiceRequest,(ActixError,ServiceRequest)>> {
+    match req.app_data::<Data<JwtManager>>() {
+        Some(jwt) => match jwt.verify_token(creds.token()) {
+            Ok(data) => {
+                req.extensions_mut().insert(data.claims); 
+                ready(Ok(req))
+            }
+            Err(_) => ready(Err((actix_web::error::ErrorUnauthorized("invalid token"), req))),
+        },
+        None => ready(Err((actix_web::error::ErrorInternalServerError("JwtManager missing"), req))),
     }
 }
+
 
 pub fn auth_middleware(
 ) -> HttpAuthentication<

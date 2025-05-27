@@ -1,4 +1,4 @@
-use actix_web::{web, HttpResponse, Responder};
+use actix_web::{web, HttpResponse, Result as ActixResult, error};
 use bcrypt::{hash, verify, DEFAULT_COST};
 use serde::Serialize;
 
@@ -17,52 +17,45 @@ struct AuthResponse {
 pub async fn register(
     user_svc: web::Data<UserService>,
     info: web::Json<RegisterRequest>,
-) -> impl Responder {
-    // 1) Hash the plaintext password
-    let hashed = match hash(&info.password, DEFAULT_COST) {
-        Ok(h) => h,
-        Err(_) => return HttpResponse::InternalServerError().finish(),
-    };
-
-    // 2) Build our Insertable NewUser
+) -> ActixResult<HttpResponse> {
+    let hashed = hash(&info.password, DEFAULT_COST)
+        .map_err(error::ErrorInternalServerError)?;
     let new_user = NewUser {
         username: info.username.clone(),
+        phone: info.phone.clone(),
         email: info.email.clone(),
         password_hash: hashed,
-        role: UserRole::User, // default role
+        role: UserRole::User,
     };
 
-    // 3) Call the service on a thread pool
-    let created = match web::block(move || user_svc.register(new_user)).await {
-        Ok(Ok(u)) => u,
-        _ => return HttpResponse::Unauthorized().body("Bad credentials"),
-    };
-    
-    HttpResponse::Created().json(created)
+    let created = web::block(move || user_svc.register(new_user))
+        .await
+        .map_err(error::ErrorInternalServerError)?
+        .map_err(error::ErrorInternalServerError)?;
+
+    Ok(HttpResponse::Created().json(created))
 }
 
 /// POST /auth/login
-
 pub async fn login(
     user_svc: web::Data<UserService>,
     jwt_mgr: web::Data<JwtManager>,
     info: web::Json<LoginRequest>,
-) -> impl Responder {
+) -> ActixResult<HttpResponse> {
     let username = info.username.clone();
 
-    let user = match web::block(move || user_svc.get_by_username(&username)).await {
-        Ok(Ok(u)) => u,
-        _ => return HttpResponse::Unauthorized().body("Bad credentials"),
-    };
+    let user = web::block(move || user_svc.get_by_username(&username))
+        .await
+        .map_err(error::ErrorInternalServerError)?
+        .map_err(|_| error::ErrorUnauthorized("Bad credentials"))?;
 
-    // 2) Verify password
     if !verify(&info.password, &user.password_hash).unwrap_or(false) {
-        return HttpResponse::Unauthorized().body("Bad credentials");
+        return Err(error::ErrorUnauthorized("Bad credentials"));
     }
 
-    // 3) Issue JWT
-    match jwt_mgr.create_token(&user.id.to_string()) {
-        Ok(token) => HttpResponse::Ok().json(AuthResponse { token }),
-        Err(_) => HttpResponse::InternalServerError().finish(),
-    }
+    let token = jwt_mgr
+        .create_token(&user.id, &user.role.clone())
+        .map_err(|_| error::ErrorInternalServerError("Token creation failed"))?;
+
+    Ok(HttpResponse::Ok().json(AuthResponse { token }))
 }

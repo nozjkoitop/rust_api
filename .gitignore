@@ -1,0 +1,21 @@
+# Rust
+/target/
+
+# Node / SvelteKit
+/frontend/node_modules/
+/frontend/.svelte-kit/
+
+# Local env
+/.env
+
+# IDE
+/.idea/
+/*.iml
+/.vscode/
+
+# Git metadata
+/.git/
+
+# Logs, OS metadata
+*.log
+.DS_Store

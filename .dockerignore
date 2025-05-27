@@ -1,0 +1,15 @@
+# Rust build artifacts & source control
+/target
+.git
+.gitignore
+.dockerignore
+
+# IDE
+.idea
+
+# Node sides
+frontend/node_modules
+frontend/.svelte-kit
+
+# Local config
+.env

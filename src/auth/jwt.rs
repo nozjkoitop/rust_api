@@ -2,10 +2,12 @@ use jsonwebtoken::{encode, decode, Header, Validation, EncodingKey, DecodingKey,
 use serde::{Deserialize, Serialize};
 use chrono::Utc;
 use crate::config::jwt_config::AuthConfig;
+use crate::models::user::UserRole;  
 
 #[derive(Serialize, Deserialize)]
 pub struct Claims {
-    pub sub: String,
+    pub sub: i64,
+    pub role: UserRole,
     pub exp: usize,
 }
 
@@ -25,10 +27,11 @@ impl JwtManager {
         }
     }
 
-    pub fn create_token(&self, sub: &str) -> Result<String, jsonwebtoken::errors::Error> {
+    pub fn create_token(&self, sub: &i64, role:&UserRole) -> Result<String, jsonwebtoken::errors::Error> {
         let now = Utc::now().timestamp() as usize;
         let claims = Claims {
             sub: sub.to_owned(),
+            role: role.to_owned(),
             exp: now + self.ttl,
         };
         encode(&Header::default(), &claims, &self.encoding)

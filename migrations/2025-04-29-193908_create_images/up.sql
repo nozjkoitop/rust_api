@@ -6,3 +6,13 @@ CREATE TABLE IMAGES (
                         url         TEXT NOT NULL,
                         created_at  TIMESTAMP NOT NULL DEFAULT NOW()
 );
+
+INSERT INTO images (car_id, url)
+VALUES
+    (1, '/uploads/1/1.jpg'),
+    (1, '/uploads/1/2.jpg'),
+    (1, '/uploads/1/3.jpg'),
+    (1, '/uploads/1/4.jpg'),
+    (2, '/uploads/2/1.jpg'),
+    (2, '/uploads/2/2.jpg'),
+    (2, '/uploads/2/3.jpg')
