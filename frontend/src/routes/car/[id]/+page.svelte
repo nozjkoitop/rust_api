@@ -82,10 +82,16 @@
 					{/each}
 				</div>
 			{/if}
+
+      {#if car.description}
+        <div class="bg-gray-800 rounded-xl p-6">
+          {car.description}
+        </div>
+      {/if}
 		</div>
 
 		<div class="space-y-6">
-			<div class="bg-gray-800 rounded-xl p-6 shadow-lg">
+			<div class="bg-gray-800 rounded-xl p-6">
 				<h1 class="text-2xl font-bold">{car.make} {car.model}</h1>
 				<p class="text-gray-400 mt-1">{car.year} Model</p>
 				<div class="mt-6">
@@ -105,6 +111,18 @@
 						<div class="flex justify-between">
 							<span class="text-gray-400">Year:</span>
 							<span class="font-medium">{car.year}</span>
+						</div>
+						<div class="flex justify-between">
+							<span class="text-gray-400">Mileage:</span>
+							<span class="font-medium">{car.mileage}</span>
+						</div>
+						<div class="flex justify-between">
+							<span class="text-gray-400">Engine size:</span>
+							<span class="font-medium">{car.engine}</span>
+						</div>
+						<div class="flex justify-between">
+							<span class="text-gray-400">Transmission:</span>
+							<span class="font-medium">{car.transmission}</span>
 						</div>
 						<div class="flex justify-between">
 							<span class="text-gray-400">Listed:</span>

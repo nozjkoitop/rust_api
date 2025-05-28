@@ -130,7 +130,64 @@
 						/>
 					</div>
 				</div>
+
+				<div>
+					<label for="mileage" class="block text-sm font-medium text-gray-300 mb-1">Mileage</label>
+					<div class="relative">
+						<input
+							id="mileage"
+							name="mileage"
+							type="number"
+							min="0"
+							required
+							placeholder="0"
+							class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+						/>
+					</div>
+				</div>
+
+				<div>
+					<label for="engine" class="block text-sm font-medium text-gray-300 mb-1">Engine</label>
+					<div class="relative">
+						<input
+							id="engine"
+							name="engine"
+							type="number"
+							min="0"
+							required
+							placeholder="0"
+							class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+						/>
+					</div>
+				</div>
+
+				<div>
+					<label for="transmission" class="block text-sm font-medium text-gray-300 mb-1">Transmission</label>
+					<div class="relative">
+						<input
+							id="transmission"
+							name="transmission"
+							type="text"
+							required
+							class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+						/>
+					</div>
+				</div>
 			</div>
+
+      <div>
+        <div>
+					<label for="description" class="block text-sm font-medium text-gray-300 mb-1">Description</label>
+					<div class="relative">
+            <textarea
+              id="description"
+              name="description"
+              required
+              class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+            </textarea>
+					</div>
+				</div>
+      </div>
 
 			<div>
 				<label class="block text-sm font-medium text-gray-300 mb-1">Car Images</label>
