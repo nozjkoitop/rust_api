@@ -84,6 +84,10 @@
 				/>
 			</div>
 
+      <div>
+        By creating a CarTrader account, you agree to the CarTrader Terms of Service.
+      </div>
+
 			<div>
 				<button
 					type="submit"
