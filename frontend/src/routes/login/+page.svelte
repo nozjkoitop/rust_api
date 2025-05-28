@@ -1,6 +1,5 @@
 <script>
   import { enhance } from "$app/forms";
-  import { goto } from "$app/navigation";
 
   let loading = false;
   let error = "";
@@ -25,14 +24,14 @@
       use:enhance={() => {
         loading = true;
         error = "";
-        
+
         return async ({ result }) => {
           loading = false;
-          
+
           if (result.type === "failure") {
             error = result.data?.message || "Login failed. Please try again.";
           } else if (result.type === "redirect") {
-            goto(result.location);
+            window.location.href = result.location;
           }
         };
       }}

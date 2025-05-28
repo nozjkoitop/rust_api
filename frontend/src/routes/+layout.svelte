@@ -71,6 +71,8 @@
 							</svg>
 						</button>
 					</div>
+        {:else}
+          <a href="/login" class="flex items-center space-x-3">Login</a>
 				{/if}
 			</div>
 		</div>
