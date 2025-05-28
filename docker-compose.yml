@@ -43,6 +43,10 @@ services:
     depends_on:
       app:
         condition: service_started
+    volumes:
+      - ./frontend:/frontend
+      - node-modules:/frontend/node_modules
 
 volumes:
   db-data:
+  node-modules:
