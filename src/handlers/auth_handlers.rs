@@ -47,7 +47,9 @@ pub async fn login(
     let user = web::block(move || user_svc.get_by_username(&username))
         .await
         .map_err(error::ErrorInternalServerError)?
-        .map_err(|_| error::ErrorUnauthorized("Bad credentials"))?;
+        .map_err(|e| {
+            log::error!("{}", e);
+            error::ErrorUnauthorized("Error getting user")})?;
 
     if !verify(&info.password, &user.password_hash).unwrap_or(false) {
         return Err(error::ErrorUnauthorized("Bad credentials"));
@@ -55,7 +57,9 @@ pub async fn login(
 
     let token = jwt_mgr
         .create_token(&user.id, &user.role.clone())
-        .map_err(|_| error::ErrorInternalServerError("Token creation failed"))?;
+        .map_err(|e| { 
+            log::error!("{}", e);
+            error::ErrorInternalServerError("Token creation failed") })?;
 
     Ok(HttpResponse::Ok().json(AuthResponse { token }))
 }

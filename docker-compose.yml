@@ -29,7 +29,7 @@ services:
       DATABASE_URL: postgres://root:root@postgres:5432/whatever
       JWT_SECRET: secret
       TOKEN_TTL: "3600"
-      RUST_LOG: info
+      RUST_LOG: debug
     volumes:
       - ./migrations:/usr/local/bin/migrations
       - ./uploads:/usr/local/bin/uploads

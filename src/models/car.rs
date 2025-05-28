@@ -18,6 +18,10 @@ pub struct Car {
     pub year: i32,
     pub price: BigDecimal,
     pub created_at: NaiveDateTime,
+    pub description: Option<String>,
+    pub mileage: i32,
+    pub engine: String,
+    pub transmission: String,
     pub properties: JsonValue,
 }
 
@@ -28,6 +32,10 @@ pub struct NewCar {
     pub model: String,
     pub year: i32,
     pub price: BigDecimal,
+    pub description: Option<String>,
+    pub mileage: i32,
+    pub engine: String,
+    pub transmission: String,
     #[serde(default = "default_properties")]
     #[diesel(sql_type = diesel::sql_types::Jsonb)]
     pub properties: JsonValue,

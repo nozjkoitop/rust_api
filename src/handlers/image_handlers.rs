@@ -9,6 +9,8 @@ use crate::{
 };
 use crate::auth::guards::require_admin;
 
+pub(crate) const IMAGES_ROOT: &str = "/usr/local/bin/uploads/";
+
 /// GET /cars/{car_id}/images
 pub async fn list_images(
     svc: web::Data<ImageService>,
@@ -37,7 +39,7 @@ pub async fn get_image_by_id(
         .map_err(error::ErrorInternalServerError)?;  
 
     let fname = img.url.rsplit('/').next().unwrap_or(&img.url);
-    let disk = Path::new("uploads")
+    let disk = Path::new(IMAGES_ROOT)
         .join(img.car_id.to_string())
         .join(fname);
 
@@ -70,7 +72,7 @@ pub async fn upload_image(
         buf.extend_from_slice(&chunk);
     }
     
-    let dir = format!("uploads/{}", car_id);
+    let dir = format!("{}{}", IMAGES_ROOT, car_id);
     tokio::fs::create_dir_all(&dir)
         .await
         .map_err(|e| error::ErrorInternalServerError(e.to_string()))?;
@@ -83,7 +85,7 @@ pub async fn upload_image(
 
     let new_img = NewImage {
         car_id,
-        url: format!("/cars/{}/image/{}", car_id, fname),
+        url: format!("{}{}/{}", IMAGES_ROOT, car_id, fname),
     };
     let img = web::block(move || svc.upload(new_img))
         .await
@@ -112,7 +114,7 @@ pub async fn delete_image(
         .map_err(error::ErrorInternalServerError)?;
 
     let fname = img.url.rsplit('/').next().unwrap_or("");
-    let disk_path = format!("uploads/{}/{}", img.car_id, fname);
+    let disk_path = format!("{}{}/{}", IMAGES_ROOT, img.car_id, fname);
 
     tokio::fs::remove_file(&disk_path)
         .await

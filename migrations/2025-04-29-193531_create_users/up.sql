@@ -21,5 +21,5 @@ VALUES ('root',
        ('dummy',
         '+375449876543',
         'dummy@dummy.net',
-        '$2a$12$Ii9mE.fS1Wca4gjtWqzTnO6d0oUPGfaztXsb8XU7M2TIW9Uyx7RGS', -- bcrypt("password")
+        '$2a$12$N6hfSYaAVPKTKTqglFkrReXaBv/rtJryxdNfzF6lXISoDhVTvypc2', -- bcrypt("password")
         'User');
