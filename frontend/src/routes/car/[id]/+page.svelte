@@ -131,6 +131,15 @@
 					</div>
 				</div>
 			</div>
+
+      <div>
+        <a
+          href="https://t.me/lamp_y"
+          class="block bg-purple-600 text-white p-6 rounded-lg"
+          target="_blank">
+          Contact manager
+        </a>
+      </div>
 		</div>
 	</div>
 </div>
