@@ -9,9 +9,13 @@ export const actions = {
     const model = data.get('model');
     const yearStr = data.get('year');
     const priceStr = data.get('price');
+    const description = data.get('description');
+    const mileage = data.get('mileage');
+    const engine = data.get('engine');
+    const transmission = data.get('transmission');
 
-    if (!make || !model || !yearStr || !priceStr) {
-      return fail(400, { message: 'All fields are required' });
+    if (!make || !model || !yearStr || !priceStr || !mileage || !engine || !transmission) {
+      return fail(400, { message: 'Something is missing' });
     }
 
     const year = parseInt(yearStr.toString(), 10);
@@ -29,7 +33,7 @@ export const actions = {
       const resp = await fetch(`${API_URL}/cars`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ make, model, year, price })
+        body: JSON.stringify({ make, model, year, price, description, mileage, engine, transmission })
       });
 
       if (!resp.ok) {

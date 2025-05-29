@@ -7,17 +7,14 @@ CREATE TABLE CARS
     price        NUMERIC(10, 2) NOT NULL,
     created_at   TIMESTAMP      NOT NULL DEFAULT NOW(),
     description  TEXT,
-    mileage      INT            NOT NULL,
+    mileage      VARCHAR        NOT NULL,
     engine       VARCHAR        NOT NULL,
-    transmission VARCHAR        NOT NULL,
-    properties   JSONB          NOT NULL DEFAULT '{}'::jsonb
+    transmission VARCHAR        NOT NULL
 );
 
 INSERT INTO cars
-(make, model, year, price, description, mileage, engine, transmission, properties)
+(make, model, year, price, description, mileage, engine, transmission)
 VALUES ('Tesla', 'Model S', 2016, 30000,
-        NULL, 70000, 'electric', 'automatic',
-        '{}'::jsonb),
+        NULL, 70000, 'electric', 'automatic'),
        ('Ford', 'Explorer', 2020, 33000,
-        NULL, 80000, '2.3', 'automatic',
-        '{}'::jsonb);
+        NULL, 80000, '2.3', 'automatic');

@@ -15,10 +15,9 @@ diesel::table! {
         price -> Numeric,
         created_at -> Timestamp,
         description -> Nullable<Text>,
-        mileage -> Int4,
+        mileage -> Varchar,
         engine -> Varchar,
         transmission -> Varchar,
-        properties -> Jsonb,
     }
 }
 
